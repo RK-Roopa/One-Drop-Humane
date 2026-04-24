@@ -1,0 +1,199 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const collections = [
+  'peak-performance',
+  'entrepreneurship', 
+  'workplace-culture',
+  'personal-growth',
+  'purpose-identity',
+  'leadership',
+];
+
+const topicLabels: Record<string, string> = {
+  'peak-performance': 'Peak Performance',
+  'entrepreneurship': 'Entrepreneurship',
+  'workplace-culture': 'Workplace Culture',
+  'personal-growth': 'Personal Growth',
+  'purpose-identity': 'Purpose & Identity',
+  'leadership': 'Leadership',
+};
+
+const topicDescriptions: Record<string, string> = {
+  'peak-performance': 'How leaders operate at their best without burning out.',
+  'entrepreneurship': 'The real terrain of building something from nothing.',
+  'workplace-culture': 'What it takes to build environments where people genuinely thrive.',
+  'personal-growth': 'The inner work that makes the outer work possible.',
+  'purpose-identity': 'Who you are beneath the role, the title, the hustle.',
+  'leadership': 'Honest reflections on what it means to guide others.',
+};
+
+export async function getStaticPaths() {
+  const paths = [];
+  const cols = [
+    'peak-performance',
+    'entrepreneurship',
+    'workplace-culture',
+    'personal-growth',
+    'purpose-identity',
+    'leadership',
+  ];
+  for (const col of cols) {
+    const entries = await getCollection(col as any);
+    paths.push({
+      params: { topic: col },
+      props: { entries, col },
+    });
+  }
+  return paths;
+}
+
+const { topic } = Astro.params;
+const { entries } = Astro.props;
+const label = topicLabels[topic] || topic;
+const description = topicDescriptions[topic] || '';
+
+const sorted = entries.sort((a: any, b: any) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title={`${label} — One Drop Humane`}
+      description={description}
+    />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="topic-header">
+        <a href="/topics" class="back">← All Topics</a>
+        <h1>{label}</h1>
+        <p>{description}</p>
+      </section>
+
+      <section class="essays-list">
+        {sorted.length === 0 ? (
+          <p class="empty">Essays coming soon. Check back shortly.</p>
+        ) : (
+          sorted.map((entry: any) => (
+            <a href={`/${topic}/${entry.id}`} class="essay-row">
+              <div class="essay-info">
+                <h2>{entry.data.title}</h2>
+                <p>{entry.data.description}</p>
+                <span class="date">
+                  {new Date(entry.data.date).toLocaleDateString('en-US', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                  })}
+                </span>
+              </div>
+              <span class="arrow">→</span>
+            </a>
+          ))
+        )}
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .topic-header {
+    max-width: 680px;
+    margin: 60px auto 40px;
+    padding: 0 24px;
+  }
+
+  .back {
+    display: inline-block;
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .back:hover {
+    color: #111;
+  }
+
+  .topic-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+    color: #111;
+  }
+
+  .topic-header p {
+    font-size: 1.05rem;
+    color: #666;
+    line-height: 1.7;
+  }
+
+  .essays-list {
+    max-width: 720px;
+    margin: 0 auto 80px;
+    padding: 0 24px;
+  }
+
+  .essay-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 0;
+    border-bottom: 1px solid #eee;
+    text-decoration: none;
+    color: inherit;
+    transition: padding-left 0.2s;
+  }
+
+  .essay-row:first-child {
+    border-top: 1px solid #eee;
+  }
+
+  .essay-row:hover {
+    padding-left: 8px;
+  }
+
+  .essay-info h2 {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+    color: #111;
+  }
+
+  .essay-info p {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    max-width: 520px;
+  }
+
+  .date {
+    font-size: 0.8rem;
+    color: #aaa;
+  }
+
+  .arrow {
+    font-size: 1.4rem;
+    color: #bbb;
+    flex-shrink: 0;
+    margin-left: 24px;
+    transition: color 0.2s;
+  }
+
+  .essay-row:hover .arrow {
+    color: #111;
+  }
+
+  .empty {
+    padding: 40px 0;
+    color: #aaa;
+    font-style: italic;
+  }
+</style>

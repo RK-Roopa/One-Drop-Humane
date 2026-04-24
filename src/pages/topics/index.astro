@@ -1,0 +1,144 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const topics = [
+  {
+    slug: "peak-performance",
+    title: "Peak Performance",
+    description: "How leaders operate at their best without burning out. The science and lived experience of sustained excellence.",
+  },
+  {
+    slug: "entrepreneurship",
+    title: "Entrepreneurship",
+    description: "The real terrain of building something from nothing. Not the highlight reel — the actual journey.",
+  },
+  {
+    slug: "workplace-culture",
+    title: "Workplace Culture",
+    description: "What it takes to build environments where people genuinely thrive. Culture is not a perk. It is architecture.",
+  },
+  {
+    slug: "personal-growth",
+    title: "Personal Growth",
+    description: "The inner work that makes the outer work possible. Who you are becoming matters as much as what you are building.",
+  },
+  {
+    slug: "purpose-identity",
+    title: "Purpose & Identity",
+    description: "Who you are beneath the role, the title, the hustle. The questions worth sitting with.",
+  },
+  {
+    slug: "leadership",
+    title: "Leadership",
+    description: "Honest reflections on what it means to guide others. Leadership is not a position. It is a practice.",
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title="Topics — One Drop Humane"
+      description="Explore the knowledge repository across six areas of lived experience and reflection."
+    />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="topics-header">
+        <h1>Explore the Topics</h1>
+        <p>Six areas of lived experience and deep reflection — for founders, leaders, and anyone building something meaningful.</p>
+      </section>
+
+      <section class="topics-list">
+        {topics.map((topic) => (
+          <a href={`/topics/${topic.slug}`} class="topic-row">
+            <div class="topic-info">
+              <h2>{topic.title}</h2>
+              <p>{topic.description}</p>
+            </div>
+            <span class="arrow">→</span>
+          </a>
+        ))}
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .topics-header {
+    max-width: 680px;
+    margin: 80px auto 60px;
+    padding: 0 24px;
+    text-align: center;
+  }
+
+  .topics-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 16px;
+    color: #111;
+  }
+
+  .topics-header p {
+    font-size: 1.05rem;
+    color: #666;
+    line-height: 1.7;
+  }
+
+  .topics-list {
+    max-width: 720px;
+    margin: 0 auto 80px;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .topic-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 32px 0;
+    border-bottom: 1px solid #eee;
+    text-decoration: none;
+    color: inherit;
+    transition: padding-left 0.2s;
+  }
+
+  .topic-row:first-child {
+    border-top: 1px solid #eee;
+  }
+
+  .topic-row:hover {
+    padding-left: 8px;
+  }
+
+  .topic-info h2 {
+    font-size: 1.2rem;
+    margin-bottom: 6px;
+    color: #111;
+  }
+
+  .topic-info p {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.6;
+    max-width: 560px;
+  }
+
+  .arrow {
+    font-size: 1.4rem;
+    color: #bbb;
+    flex-shrink: 0;
+    margin-left: 24px;
+    transition: color 0.2s;
+  }
+
+  .topic-row:hover .arrow {
+    color: #111;
+  }
+</style>
